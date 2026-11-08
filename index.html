@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F5F4F0">
+<title>Copeland | Rhea Mittal</title>
+<meta name="description" content="Designing an AI Sales Assistant for Copeland's Sales Cloud">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/design-system.css">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --bg: #F5F4F0;
+  --ink: #0C0C0C;
+  --muted: rgba(12,12,12,0.62);
+  --border: rgba(0,0,0,0.08);
+  --white: #FFFFFF;
+  /* Project accent: Salesforce Lightning blue */
+  --accent: #0176D3;
+  --accent-bg: rgba(1,118,211,0.07);
+  --accent-line: rgba(1,118,211,0.16);
+  --hero: #032D60;
+  --warn: #C2410C;
+  --warn-bg: rgba(194,65,12,0.06);
+  --warn-line: rgba(194,65,12,0.2);
+}
+
+body { background: var(--bg); color: var(--ink); font-family: 'Open Sans', system-ui, sans-serif; font-size: 16px; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+/* ─── HERO BAND ─── */
+.cs-hero-band { width: 100%; padding: 132px 56px 80px; background: var(--hero); }
+.cs-hero-inner { max-width: 888px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.cs-hero-kicker { font-size: 11px; font-weight: 500; letter-spacing: 0.01em; color: rgba(255,255,255,.72); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.cs-hero-kicker .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #7EB8FF; }
+.cs-hero-h1 { font-family: 'Lato', sans-serif; font-weight: 600; font-size: clamp(31px, 4.68vw, 59px); line-height: 1.05; letter-spacing: -0.02em; color: #fff; margin-bottom: 28px; }
+.cs-hero-desc { font-size: 17px; line-height: 1.75; color: rgba(255,255,255,.82); max-width: 620px; margin-bottom: 8px; }
+.cs-hero-status { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; background: rgba(0,0,0,.3); border: 1px solid rgba(255,255,255,.15); padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,.75); }
+.cs-hero-media { width: 100%; margin-top: 40px; }
+.cs-hero-media .img-ph { margin: 0; background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.18); }
+.cs-hero-media .img-ph-title { color: rgba(255,255,255,.6); }
+.cs-hero-media .img-ph-desc { color: rgba(255,255,255,.4); }
+.cs-hero-media .img-ph-badge { background: rgba(255,255,255,.1); color: rgba(255,255,255,.6); }
+
+/* ─── CONTENT ─── */
+.cs-content { max-width: 1000px; margin: 0 auto; padding: 0 56px 140px; }
+
+.cs-overview { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin: 56px 0 80px; }
+.cs-ov-cell { padding: 24px 24px; border-right: 1px solid var(--border); background: var(--white); }
+.cs-ov-cell:last-child { border-right: none; }
+.cs-ov-label { font-size: 11px; letter-spacing: 0.01em; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+.cs-ov-val { font-size: 14px; font-weight: 500; color: var(--ink); line-height: 1.45; }
+
+.cs-section { margin-bottom: 72px; }
+.cs-sec-label { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.cs-sec-label .n { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 14px; color: var(--accent); font-variant-numeric: tabular-nums; }
+.cs-sec-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.cs-sec-title { font-family: 'Lato', sans-serif; font-weight: 600; font-size: clamp(22px, 2.73vw, 34px); line-height: 1.06; margin-bottom: 28px; }
+.cs-body { font-size: 16px; line-height: 1.8; color: rgba(0,0,0,.65); margin-bottom: 24px; }
+.cs-body strong { color: var(--ink); font-weight: 600; }
+.cs-goal { margin-top: 8px; padding: 28px 32px; background: var(--white); border: 1px solid var(--border); border-radius: 16px; font-family: 'Lato', sans-serif; font-weight: 400; font-size: clamp(19px, 2vw, 22px); line-height: 1.55; color: var(--ink); }
+.cs-goal-k { display: block; font-family: 'Open Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+@media (max-width: 600px) { .cs-goal { padding: 24px; } }
+.cs-cue { font-size: 16px; font-weight: 600; color: var(--ink); margin: 0 0 8px; }
+.mini-label { font-size: 11px; letter-spacing: 0.01em; color: var(--muted); margin: 40px 0 16px; }
+
+.img-caption { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.5; text-align: center; }
+.img-ph { border-radius: 16px; border: 1px dashed rgba(0,0,0,.12); background: rgba(0,0,0,.02); padding: 56px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 12px; margin: 32px 0 0; }
+.img-ph.h-large { min-height: 420px; }
+.img-ph.h-medium { min-height: 320px; }
+.img-ph.h-small { min-height: 220px; }
+.img-ph-badge { background: rgba(0,0,0,.06); color: rgba(0,0,0,.45); padding: 4px 12px; border-radius: 100px; font-size: 11px; font-weight: 600; }
+.img-ph-title { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 17px; color: rgba(0,0,0,.4); }
+.img-ph-desc { font-size: 13px; color: rgba(0,0,0,.35); line-height: 1.65; max-width: 460px; }
+.img-ph-desc code { font-size: 12px; background: rgba(0,0,0,.05); padding: 1px 6px; border-radius: 4px; }
+
+.cs-fig { margin: 32px 0 0; }
+.cs-fig .img-ph { margin: 0; }
+.split .cs-fig { margin: 0; }
+.cs-hero-media .cs-fig { margin: 0; }
+.hero-img { display: block; width: 100%; margin: 0 auto; border-radius: 16px; box-shadow: 0 24px 64px rgba(0,0,0,.45); transform: scale(.94); }
+
+/* Vid zoom (portfolio pattern): hero media grows 65% → 100% when in view */
+.vid-zoom { transition: transform .5s cubic-bezier(.22,1,.36,1), border-radius .5s cubic-bezier(.22,1,.36,1); }
+.vid-zoom.vid-expanded { transform: none; border-radius: 10px; }
+.cs-hero-media .cs-reveal { transform: translateY(12px); transition-duration: .45s; }
+.cs-hero-media .cs-reveal.cs-visible { transform: none; }
+@media (prefers-reduced-motion: reduce) { .vid-zoom, .cs-hero-media .cs-reveal { transition: none; transform: none; } }
+.cs-hero-media .img-caption { margin-top: 16px; }
+.cs-hero-media .img-caption { color: rgba(255,255,255,.55); }
+.shot { display: block; width: 100%; height: auto; }
+/* Before / after comparison: two quiet columns on the page background */
+.ba-board { display: grid; grid-template-columns: repeat(2, minmax(0, 260px)); grid-template-rows: auto auto auto; justify-content: center; column-gap: 64px; row-gap: 16px; margin: 40px 0; }
+.ba-col { margin: 0; display: grid; grid-row: span 3; grid-template-rows: subgrid; justify-items: center; align-items: start; width: 100%; }
+.ba-pill { display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600; background: var(--ink); color: #fff; }
+.ba-col .shot-crop { width: 100%; aspect-ratio: 1 / 2; }
+.ba-col .img-caption { margin-top: 0; }
+@media (max-width: 700px) {
+  .ba-board { grid-template-columns: minmax(0, 260px); grid-template-rows: none; row-gap: 40px; }
+  .ba-col { grid-row: auto; grid-template-rows: none; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+}
+
+/* Tall screenshots: show the top, fade out the rest */
+.shot-crop { position: relative; aspect-ratio: 4 / 5; overflow: hidden; border: 1px solid var(--border); }
+.shot-crop::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 22%; background: linear-gradient(to bottom, rgba(245,244,240,0), var(--bg)); pointer-events: none; }
+.shot-before, .shot-after { border-radius: 16px; }
+.sheet { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); background: #fff; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.split .img-ph { margin-top: 0; }
+
+/* Before / after */
+.ba-row { display: grid; grid-template-columns: 1fr 40px 1fr; gap: 16px; align-items: stretch; margin: 32px 0; }
+.ba-card { border-radius: 16px; padding: 28px; }
+.ba-before { background: var(--warn-bg); border: 1px solid var(--warn-line); }
+.ba-after { background: var(--accent-bg); border: 1px solid var(--accent-line); }
+.ba-label { font-size: 11px; font-weight: 600; letter-spacing: 0.01em; margin-bottom: 12px; }
+.ba-before .ba-label { color: var(--warn); }
+.ba-after .ba-label { color: var(--accent); }
+.ba-title { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 17px; margin-bottom: 8px; }
+.ba-text { font-size: 14px; color: var(--muted); line-height: 1.65; }
+.ba-arrow { font-family: 'Lato', sans-serif; font-size: 25px; font-weight: 600; color: rgba(0,0,0,.18); display: flex; align-items: center; justify-content: center; }
+
+/* Accent cards */
+.acc-grid { display: grid; gap: 16px; margin: 32px 0 0; }
+.acc-grid.g3 { grid-template-columns: repeat(3, 1fr); }
+.acc-grid.g2 { grid-template-columns: repeat(2, 1fr); }
+.acc-card { background: var(--accent-bg); border: 1px solid var(--accent-line); border-radius: 16px; padding: 28px 24px; }
+.acc-card .ico { margin-bottom: 16px; color: var(--accent); }
+.acc-card h3 { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 17px; color: var(--accent); margin-bottom: 8px; }
+.acc-card p { font-size: 13px; color: rgba(0,0,0,.62); line-height: 1.65; }
+.w-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: border-color .2s; }
+.w-card:hover { border-color: rgba(0,0,0,.15); }
+.w-card h3 { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 16px; margin-bottom: 8px; }
+.w-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* Step flow */
+.step-flow { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin: 32px 0 0; }
+.step-row { display: grid; grid-template-columns: 60px 1fr; border-bottom: 1px solid var(--border); background: var(--white); }
+.step-row:last-child { border-bottom: none; }
+.step-num { display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--border); font-family: 'Lato', sans-serif; font-weight: 600; font-size: 16px; color: rgba(0,0,0,.18); padding: 24px 0; }
+.step-content { padding: 22px 28px; }
+.step-title { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+.step-body { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* Price journey */
+.journey { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 12px; align-items: stretch; margin: 32px 0 0; }
+.j-stop { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.j-tag { font-size: 11px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+.j-name { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 18px; margin-bottom: 6px; }
+.j-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.j-arrow { display: flex; align-items: center; color: rgba(0,0,0,.2); font-size: 20px; }
+.variance-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.v-pill { border-radius: 14px; padding: 18px 20px; border: 1px dashed var(--accent-line); background: rgba(255,255,255,.5); }
+.v-pill strong { display: block; font-family: 'Lato', sans-serif; font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+.v-pill span { font-size: 12px; color: var(--muted); line-height: 1.55; display: block; }
+
+
+/* Decision criteria */
+.criteria { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 32px 0 0; }
+.crit { background: var(--white); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 12px; padding: 22px 24px; }
+.crit h3 { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 16px; margin-bottom: 6px; }
+.crit p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.explore-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chip { font-size: 12px; font-weight: 500; padding: 8px 14px; border-radius: 100px; background: var(--white); border: 1px solid var(--border); color: var(--muted); }
+.chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* The final product: toggles on the left, the assistant on the right */
+.fp-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 360px); gap: 48px; align-items: start; margin-top: 32px; }
+.fp-tabs { display: flex; flex-direction: column; gap: 12px; position: sticky; top: 96px; }
+.fp-tab { font: inherit; text-align: left; cursor: pointer; background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 24px; transition: border-color .2s, background-color .2s; }
+.fp-tab h3 { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 17px; color: var(--ink); margin-bottom: 8px; transition: color .2s; }
+.fp-tab p { font-size: 14px; line-height: 1.65; color: var(--muted); }
+.fp-tab:hover { border-color: rgba(0,0,0,.2); }
+.fp-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fp-tab[aria-selected="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.fp-tab[aria-selected="true"] h3 { color: var(--accent); }
+.fp-panel { margin: 0; animation: fpIn .3s cubic-bezier(.22,1,.36,1); }
+.fp-shot { display: block; width: 100%; height: auto; border-radius: 20px; border: 1px solid var(--border); }
+@keyframes fpIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .fp-panel { animation: none; } }
+@media (max-width: 760px) {
+  .fp-wrap { grid-template-columns: 1fr; gap: 24px; }
+  .fp-tabs { position: static; }
+  .fp-stage { max-width: 340px; width: 100%; justify-self: center; }
+}
+
+/* Learnings */
+.learnings { display: flex; flex-direction: column; gap: 8px; }
+.learning { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px 28px; display: flex; gap: 20px; align-items: flex-start; transition: border-color .2s; }
+.learning:hover { border-color: rgba(12,12,12,.18); }
+.l-ico { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--accent-bg); color: var(--accent); border-radius: 8px; flex-shrink: 0; margin-top: 2px; }
+.l-text { font-size: 15px; line-height: 1.7; color: rgba(12,12,12,.65); }
+.l-text strong { color: var(--ink); font-weight: 600; }
+
+
+/* Footer CTA */
+.cs-footer { border-radius: 22px; overflow: hidden; margin-top: 80px; border: 1px solid var(--border); background: #0F1A2E; }
+.cs-footer-inner { padding: 64px 56px; text-align: center; }
+.cs-footer-title { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 41px; color: #fff; margin-bottom: 12px; line-height: 1.1; }
+.cs-footer-sub { color: rgba(255,255,255,.55); font-size: 16px; margin-bottom: 32px; }
+.cs-footer-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.fb-primary { background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,.35); color: #fff; display: inline-flex; align-items: center; gap: 8px; padding: 16px 32px; border-radius: 100px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background .2s, border-color .2s; }
+.fb-primary:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.55); }
+.fb-ghost { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.7); padding: 16px 32px; border-radius: 100px; font-size: 14px; font-weight: 500; text-decoration: none; transition: border-color .2s, color .2s; }
+.fb-ghost:hover { border-color: rgba(255,255,255,.5); color: #fff; }
+
+/* More projects */
+.more-head { display: flex; align-items: center; justify-content: space-between; margin: 48px 0 20px; }
+.more-head span { font-size: 11px; color: var(--muted); }
+.more-all { font-size: 12px; font-weight: 600; color: var(--muted); text-decoration: none; border: 1px solid var(--border); padding: 8px 16px; border-radius: 100px; transition: color .2s, border-color .2s; }
+.more-all:hover { color: var(--ink); border-color: rgba(0,0,0,.25); }
+.more-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.more-card { display: block; text-decoration: none; color: inherit; border-radius: 20px; padding: 36px 40px; transition: border-color .2s; }
+.more-card .k { font-size: 11px; margin-bottom: 12px; }
+.more-card .t { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 25px; margin-bottom: 8px; }
+.more-card p { font-size: 13px; color: rgba(12,12,12,.55); line-height: 1.5; }
+.mc-blue { background: rgba(37,99,235,.06); border: 1px solid rgba(37,99,235,.12); }
+.mc-blue:hover { border-color: rgba(37,99,235,.3); }
+.mc-blue .k { color: #2563EB; }
+.mc-wine { background: rgba(125,26,46,.06); border: 1px solid rgba(125,26,46,.12); }
+.mc-wine:hover { border-color: rgba(125,26,46,.3); }
+.mc-wine .k { color: #C4566A; }
+
+.footer-bar { border-top: 1px solid var(--border); padding: 20px 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 12px; color: var(--muted); }
+
+/* Scroll reveal */
+.cs-reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.25,.46,.45,.94), transform .7s cubic-bezier(.25,.46,.45,.94); }
+.cs-reveal.cs-visible { opacity: 1; transform: none; }
+.reveal-d2 { transition-delay: .2s; }
+.reveal-d3 { transition-delay: .3s; }
+.reveal-d4 { transition-delay: .4s; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .cs-hero-band { padding: 112px 20px 64px; }
+  .cs-content { padding: 0 20px 100px; }
+  .cs-section { margin-bottom: 56px; }
+  .cs-overview { grid-template-columns: 1fr 1fr; }
+  .cs-ov-cell:nth-child(2n) { border-right: none; }
+  .cs-ov-cell:nth-child(n+3) { border-top: 1px solid var(--border); }
+  .cs-ov-cell:last-child { grid-column: 1 / -1; }
+  .acc-grid.g3 { grid-template-columns: 1fr 1fr; }
+  .ba-row { grid-template-columns: 1fr; }
+  .ba-arrow { display: none; }
+  .journey { grid-template-columns: 1fr; }
+  .j-arrow { justify-content: center; transform: rotate(90deg); }
+  .cs-footer-inner { padding: 40px 24px; }
+  .cs-footer-title { font-size: 28px; }
+  .footer-bar { padding: 20px; }
+}
+@media (max-width: 600px) {
+  .cs-overview, .acc-grid.g3, .acc-grid.g2, .split, .criteria, .variance-list, .more-grid { grid-template-columns: 1fr; }
+  .cs-ov-cell { border-right: none !important; border-top: 1px solid var(--border); }
+  .cs-ov-cell:first-child { border-top: none; }
+  .img-ph { padding: 40px 20px; }
+  .img-ph.h-large { min-height: 260px; }
+  .more-card { padding: 28px; }
+  .footer-bar { flex-direction: column; text-align: center; }
+}
+.flow-viewer-controls { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+.flow-btn { background: var(--white); border: 1px solid var(--border); border-radius: 100px; padding: 8px 16px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; transition: border-color .2s, color .2s; }
+.flow-btn:hover { border-color: var(--accent-line); color: var(--accent); }
+.flow-viewer-hint { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 0.01em; margin-top: 12px; }
+
+/* ITERATION BOARD (pan/zoom, same controls as the TechGuy app flow viewer) */
+.ib-fig { margin: 32px 0 40px; }
+.ib-viewer { position: relative; height: 640px; overflow: hidden; border-radius: 16px; border: 1px solid var(--border); background-color: #FAFAF8; background-image: radial-gradient(rgba(0,0,0,.09) 1px, transparent 1px); background-size: 22px 22px; cursor: grab; user-select: none; touch-action: none; outline: none; }
+.ib-viewer:focus-visible { box-shadow: 0 0 0 3px var(--accent-line); }
+.ib-viewer.dragging { cursor: grabbing; }
+.ib-canvas { position: absolute; top: 0; left: 0; width: 1480px; padding: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; align-items: start; transform-origin: 0 0; }
+.ib-canvas.anim { transition: transform .35s cubic-bezier(.22,1,.36,1); }
+.ib-col { display: flex; flex-direction: column; gap: 36px; }
+.ib-card { all: unset; display: block; cursor: pointer; border-radius: 22px; }
+.ib-card img { display: block; width: 100%; height: auto; pointer-events: none; border-radius: 22px; transition: box-shadow .25s; }
+.ib-label { display: block; font-family: 'Lato', sans-serif; font-size: 22px; font-weight: 600; color: rgba(0,0,0,.28); margin: 0 0 12px 4px; }
+.ib-card:hover img, .ib-card:focus-visible img { box-shadow: 0 0 0 3px var(--accent-line); }
+.ib-card:focus-visible { outline: none; }
+.ib-card.active img { box-shadow: 0 0 0 4px var(--accent); }
+.ib-final .ib-label { color: var(--accent); }
+
+.ib-wrap { position: relative; border-radius: 16px; overflow: hidden; }
+.ib-scrim { position: absolute; inset: 0; background: rgba(12,12,12,.18); z-index: 5; opacity: 0; transition: opacity .3s; }
+.ib-scrim.open { opacity: 1; }
+.ib-drawer { position: absolute; top: 12px; right: 12px; bottom: 12px; width: min(380px, calc(100% - 24px)); z-index: 6; background: var(--white); border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,.12); display: flex; flex-direction: column; transform: translateX(calc(100% + 24px)); transition: transform .4s cubic-bezier(.22,1,.36,1); }
+.ib-drawer.open { transform: none; }
+.ib-drawer[hidden], .ib-scrim[hidden] { display: none; }
+.ib-d-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 0 28px; }
+.ib-d-kicker { font-size: 12px; font-weight: 600; color: #fff; background: var(--ink); padding: 6px 12px; border-radius: 8px; }
+.ib-d-close { all: unset; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--muted); }
+.ib-d-close:hover, .ib-d-close:focus-visible { background: var(--bg); color: var(--ink); }
+.ib-d-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 16px 24px; }
+.ib-d-img { display: block; width: 100%; max-height: 220px; object-fit: contain; height: auto; border-radius: 16px; background: var(--bg); padding: 12px; box-sizing: border-box; }
+.ib-d-title { font-family: 'Lato', sans-serif; font-size: 20px; font-weight: 600; color: var(--ink); margin: 24px 0 10px; }
+.ib-d-text { font-size: 15px; line-height: 1.7; color: var(--muted); }
+.ib-d-nav { display: flex; justify-content: space-between; gap: 8px; padding: 16px 28px 24px; border-top: 1px solid var(--border); }
+.ib-d-nav .flow-btn:disabled { opacity: .35; cursor: default; }
+@media (max-width: 700px) {
+  .ib-viewer { height: 440px; }
+  .ib-drawer { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; max-height: calc(100% - 16px); transform: translateY(calc(100% + 16px)); }
+}
+@media (prefers-reduced-motion: reduce) { .ib-canvas.anim, .ib-drawer, .ib-scrim, .ib-card { transition: none; } }
+
+/* HANDOFF: three boards side by side, equal heights */
+.ho-row { display: grid; gap: 20px; align-items: start; margin-top: 32px; }
+.ho-item { margin: 0; min-width: 0; }
+.ho-frame { display: block; border-radius: 16px; overflow: hidden; background: var(--white); border: 1px solid var(--border); }
+.ho-frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ho-frame.missing { background: rgba(0,0,0,.02); border-style: dashed; }
+.ho-frame.missing img { visibility: hidden; }
+@media (max-width: 700px) { .ho-row { grid-template-columns: 1fr !important; } }
+
+/* PIVOT: panel vs popover */
+.pv-shot { display: block; width: 100%; height: auto; border-radius: 18px; }
+.pv-anno { position: relative; width: 100%; }
+.pv-dot, .pv-n { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; font-family: 'Lato', sans-serif; flex: none; }
+.pv-dot { position: absolute; transform: translate(-50%, -50%); box-shadow: 0 0 0 4px var(--bg); }
+.pv-changes { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 0 0 40px; padding: 0; }
+.pv-changes li { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+.pv-changes h3 { font-family: 'Lato', sans-serif; font-size: 16px; font-weight: 600; color: var(--ink); margin: 16px 0 8px; }
+.pv-changes p { font-size: 14px; line-height: 1.65; color: var(--muted); margin: 0; }
+@media (max-width: 700px) { .pv-changes { grid-template-columns: 1fr; } }
+
+/* Leaving modal: shown before any link to the live portfolio */
+.leave { width: min(440px, calc(100vw - 32px)); margin: auto; padding: 32px; border: 1px solid var(--border); border-radius: 20px; background: var(--white); color: var(--ink); box-shadow: 0 24px 64px rgba(0,0,0,.18); }
+.leave::backdrop { background: rgba(12,12,12,.4); }
+.leave[open] { animation: leaveIn .25s cubic-bezier(.22,1,.36,1); }
+@keyframes leaveIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.leave-title { font-family: 'Lato', sans-serif; font-weight: 600; font-size: 22px; line-height: 1.25; margin-bottom: 12px; }
+.leave-body { font-size: 15px; line-height: 1.7; color: var(--muted); margin-bottom: 28px; }
+.leave-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.leave-stay, .leave-go { font: inherit; font-size: 14px; font-weight: 600; padding: 12px 20px; border-radius: 100px; cursor: pointer; text-decoration: none; transition: background-color .2s, border-color .2s; }
+.leave-stay { background: var(--white); border: 1px solid var(--border); color: var(--ink); }
+.leave-stay:hover { border-color: rgba(0,0,0,.24); }
+.leave-go { background: var(--ink); border: 1px solid var(--ink); color: #fff; }
+.leave-go:hover { background: #2a2a2a; }
+.leave-stay:focus-visible, .leave-go:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .leave[open] { animation: none; } }
+@media (max-width: 480px) { .leave { padding: 24px; } .leave-actions { flex-direction: column-reverse; } .leave-stay, .leave-go { text-align: center; } }
+</style>
+<link rel="stylesheet" href="styles/nav.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ─── NAV (matches portfolio; every link goes back to the portfolio) ─── -->
+<nav class="nav-on-dark">
+  <a class="nav-logo" href="https://rhea-portfolio.vercel.app/portfolio-v2.html">RM</a>
+  <div class="nav-pill">
+    <span class="nav-pill-indicator" aria-hidden="true"></span>
+    <a href="https://rhea-portfolio.vercel.app/work.html" class="nav-pill-link active">Work</a>
+    <a href="https://rhea-portfolio.vercel.app/playground.html" class="nav-pill-link">Play</a>
+    <a href="https://rhea-portfolio.vercel.app/about.html" class="nav-pill-link">About</a>
+    <a href="https://rhea-portfolio.vercel.app/assets/Rhea%20Mittal_Resume_Product%20Designer.pdf" class="nav-pill-link" target="_blank" rel="noopener">Resume ↗</a>
+  </div>
+  <a class="nav-cta" href="https://rhea-portfolio.vercel.app/portfolio-v2.html">Contact me</a>
+  <button class="nav-burger" id="navBurger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <button class="nav-mobile-close" id="navMobileClose" aria-label="Close menu">✕</button>
+  <a href="https://rhea-portfolio.vercel.app/portfolio-v2.html">Home</a>
+  <a href="https://rhea-portfolio.vercel.app/work.html">Work</a>
+  <a href="https://rhea-portfolio.vercel.app/playground.html">Play</a>
+  <a href="https://rhea-portfolio.vercel.app/about.html">About</a>
+  <a href="https://rhea-portfolio.vercel.app/assets/Rhea%20Mittal_Resume_Product%20Designer.pdf" target="_blank" rel="noopener">Resume</a>
+</div>
+
+<main id="main" tabindex="-1">
+
+<!-- HERO -->
+<div class="cs-hero-band">
+  <div class="cs-hero-inner">
+    <div class="cs-hero-kicker">
+      <span class="dot" aria-hidden="true"></span>
+      Product Design · AI Features · Salesforce Sales Cloud
+    </div>
+    <h1 class="cs-hero-h1">Designing an AI Sales Assistant for Copeland's Sales Cloud</h1>
+    <p class="cs-hero-desc">I designed the UI for an AI sales assistant in Sales Cloud, taking it from the AI-generated UI the team had before I joined to one built on the Lightning Design System and designed around one goal: making information accessible and understandable for sales teams.</p>
+    <div class="cs-hero-media">
+      <figure class="cs-fig cs-reveal">
+        <img class="hero-img vid-zoom" src="assets/hero.webp" alt="The AI Sales Assistant open as a popover on a Salesforce account record, showing the What's New, Opportunity Summary and Guidance tabs and a feedback prompt" width="1979" height="1236" fetchpriority="high" decoding="async">
+        <figcaption class="img-caption" data-caption-draft>The AI Sales Assistant, opened from the Einstein button on an account record</figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+
+<div class="cs-content">
+
+  <!-- OVERVIEW -->
+  <div class="cs-overview cs-reveal">
+    <div class="cs-ov-cell"><div class="cs-ov-label">Company</div><div class="cs-ov-val">Copeland (global HVAC)</div></div>
+    <div class="cs-ov-cell"><div class="cs-ov-label">Role</div><div class="cs-ov-val">Human-centered designer</div></div>
+    <div class="cs-ov-cell"><div class="cs-ov-label">Timeline</div><div class="cs-ov-val">About 3 months, in development now</div></div>
+    <div class="cs-ov-cell"><div class="cs-ov-label">Team</div><div class="cs-ov-val">Business analyst, business team, tech team</div></div>
+    <div class="cs-ov-cell"><div class="cs-ov-label">Tools</div><div class="cs-ov-val">Figma, Salesforce Lightning Design System</div></div>
+  </div>
+
+  <!-- 01 THE GOAL -->
+  <section class="cs-section cs-reveal reveal-d2">
+    <div class="cs-sec-label"><span class="n">01</span> The goal</div>
+    <h2 class="cs-sec-title">Making information actionable for sales teams</h2>
+    <p class="cs-body">Copeland's sales teams use Sales Cloud to track leads from campaigns, see what stage each opportunity is in, and manage many fields per account. Copeland was adding custom fields and a new AI sales assistant on top.</p>
+    <p class="cs-goal"><span class="cs-goal-k">The core idea</span>The goal was to make the information available at a quick glance, and present it in a way that was more actionable: summarizing a content-dense opportunity page so the next steps feel clear.</p>
+  </section>
+
+  <!-- 02 MY ROLE AND IMPACT -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">02</span> My role and impact</div>
+    <h2 class="cs-sec-title">Designing for the experience, not just the feature</h2>
+    <p class="cs-body">My role was to make sure the goal was accomplished not just from a feature perspective, but from a user experience perspective.</p>
+    <p class="cs-body">Before I joined, the team was working from a UI generated entirely by AI. It showed what the feature could contain, but it had no design system, no guidelines, and no clear intent behind each choice.</p>
+
+    <div class="ba-board">
+      <figure class="ba-col">
+        <div class="shot-crop shot-before"><img class="shot" src="assets/before-ai.webp" alt="The AI-generated UI from before I joined: an Order Tracking Intelligence panel with a dark header, colored match-count cards and a long list of line items" width="780" height="1992" loading="lazy" decoding="async"></div>
+        <span class="ba-pill">Before</span>
+        <figcaption class="img-caption" data-caption-draft>The AI-generated UI the team had before I joined</figcaption>
+      </figure>
+      <figure class="ba-col">
+        <div class="shot-crop shot-after"><img class="shot" src="assets/after-lightning.webp" alt="My Lightning Design System version: a Sales Intelligence panel with a Quick View, and a Forecast, CRM, Quote and ERP table with three variance cards per line item" width="766" height="2000" loading="lazy" decoding="async"></div>
+        <span class="ba-pill">After</span>
+        <figcaption class="img-caption" data-caption-draft>My first design on the Lightning Design System</figcaption>
+      </figure>
+    </div>
+
+    <p class="cs-body">I used AI for inspiration and iteration, and built the UI with the focus on the user experience and on the Lightning Design System that Sales Cloud and Data Cloud already use, so it feels native to the tools sales teams know.</p>
+  </section>
+
+  <!-- 03 UNDERSTANDING THE NUMBERS -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">03</span> Understanding the numbers</div>
+    <h2 class="cs-sec-title">CRM vs. quote vs. ERP</h2>
+    <p class="cs-body">For Closed Won deals, the sales teams needed to analyze the price variance between CRM, quotes, and ERP.</p>
+    <p class="cs-body">There was a lot of data presented here between the different quotes during the negotiation stage, the CRM, and the final sale (ERP). So I spent several ideation sessions with the business and tech teams, working through an Excel sheet of the data, to understand what data needed to be highlighted and which variances were a priority for sales leaders to track.</p>
+
+    <figure class="cs-fig">
+      <img class="sheet" src="assets/excel.webp" alt="Excel ideation sheet with two tables, one for deals with more than one quote line item and one for more than one opportunity product line item. Each shows total ERP shipments, shipments with pricing leakage, total and average leakage, and quote, ERP shipped and eligible rate prices per line item, with leakage highlighted in red" width="851" height="405" loading="lazy" decoding="async">
+      <figcaption class="img-caption" data-caption-draft>The ideation stage: figuring out how to best showcase content-dense information</figcaption>
+    </figure>
+  </section>
+
+  <!-- 04 THE FINAL PRODUCT -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">04</span> The final product</div>
+    <h2 class="cs-sec-title">Insights, order variances, and field guidance</h2>
+    <div class="fp-wrap">
+      <div class="fp-tabs" role="tablist" aria-label="AI Sales Assistant features" aria-orientation="vertical">
+        <button type="button" class="fp-tab" role="tab" id="tab-si" aria-selected="true" aria-controls="panel-si">
+          <h3>Sales Intelligence</h3>
+          <p>Sales Intelligence gives each opportunity a quick view of its stage and probability, Key Insights, Opportunity Gaps, and a Next Best Action. Users can regenerate or give feedback.</p>
+        </button>
+        <button type="button" class="fp-tab" role="tab" id="tab-oqv" aria-selected="false" aria-controls="panel-oqv" tabindex="-1">
+          <h3>Order Quick View</h3>
+          <p>Order Quick View is for Closed Won deals. It compares CRM initial, quote accepted, and ERP shipped, and spells out three variances: realized, estimated, and CRM vs ERP. It also handles the cases where data is missing, with N/A and hidden states.</p>
+        </button>
+        <button type="button" class="fp-tab" role="tab" id="tab-gd" aria-selected="false" aria-controls="panel-gd" tabindex="-1">
+          <h3>Guidance</h3>
+          <p>Guidance explains each new Copeland field: what it is, why it was added, what to remember, and how to fill it.</p>
+        </button>
+      </div>
+      <div class="fp-stage">
+        <figure class="fp-panel" role="tabpanel" id="panel-si" aria-labelledby="tab-si">
+          <img class="fp-shot" src="assets/sales-intelligence.webp" alt="The AI Sales Assistant open on the What’s New tab, listing recently added fields and features with a short summary of each" width="450" height="729" loading="lazy" decoding="async">
+          <figcaption class="img-caption" data-caption-draft>The What’s New tab: recently added fields and features, each with a one-line summary</figcaption>
+        </figure>
+        <figure class="fp-panel" role="tabpanel" id="panel-oqv" aria-labelledby="tab-oqv" hidden>
+          <img class="fp-shot" src="assets/order-quick-view.webp" alt="The AI Sales Assistant open on the Opportunity Summary tab, showing a Quick View of the deal and a table comparing forecast, CRM, quote and ERP units and prices, with realized, estimated and CRM/ERP variance cards" width="900" height="1700" loading="lazy" decoding="async">
+          <figcaption class="img-caption" data-caption-draft>The Opportunity Summary tab: forecast, CRM, quote and ERP side by side, with the three variances called out below</figcaption>
+        </figure>
+        <figure class="fp-panel" role="tabpanel" id="panel-gd" aria-labelledby="tab-gd" hidden>
+          <img class="fp-shot" src="assets/guidance.webp" alt="The AI Sales Assistant open on the Guidance tab, listing questions that expand into approved, step-by-step guidance" width="450" height="735" loading="lazy" decoding="async">
+          <figcaption class="img-caption" data-caption-draft>The Guidance tab: pick a question to reveal approved, step-by-step guidance</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 NARROWING DOWN ITERATIONS -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">05</span> Narrowing down iterations</div>
+    <h2 class="cs-sec-title">How I decided the final UI</h2>
+    <p class="cs-body">I went through multiple iterations over the course of the 3 months, where we were actively ideating on the features and accordingly iterating the UI. A good example of that is the 10+ iterations made for the final ERP section.</p>
+    <p class="cs-body">Every iteration shows the same extreme case on purpose: an opportunity open 15x longer than the average OEM win. The goal was to test the design with the extreme, to see if it worked across all scenarios.</p>
+    <p class="cs-cue">Click on the iterations below to see why they weren’t moved forward</p>
+
+    <figure class="cs-fig ib-fig">
+      <div class="ib-wrap">
+      <div class="ib-viewer" id="ibViewer" tabindex="0" aria-label="Board of Quick View iterations. Drag to pan, scroll to zoom, select a card for details.">
+        <div class="ib-canvas" id="ibCanvas">
+        <div class="ib-col">
+          <button type="button" class="ib-card" data-i="1" aria-label="Iteration 01: open details">
+            <span class="ib-label">Iteration 01</span>
+            <img src="assets/qv-01.webp" alt="" width="884" height="286" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card" data-i="2" aria-label="Iteration 02: open details">
+            <span class="ib-label">Iteration 02</span>
+            <img src="assets/qv-02.webp" alt="" width="884" height="390" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card" data-i="3" aria-label="Iteration 03: open details">
+            <span class="ib-label">Iteration 03</span>
+            <img src="assets/qv-03.webp" alt="" width="884" height="495" draggable="false" decoding="async">
+          </button>
+        </div>
+        <div class="ib-col">
+          <button type="button" class="ib-card" data-i="4" aria-label="Iteration 04: open details">
+            <span class="ib-label">Iteration 04</span>
+            <img src="assets/qv-04.webp" alt="" width="884" height="388" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card" data-i="5" aria-label="Iteration 05: open details">
+            <span class="ib-label">Iteration 05</span>
+            <img src="assets/qv-05.webp" alt="" width="884" height="495" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card" data-i="6" aria-label="Iteration 06: open details">
+            <span class="ib-label">Iteration 06</span>
+            <img src="assets/qv-06.webp" alt="" width="884" height="282" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card" data-i="7" aria-label="Iteration 07: open details">
+            <span class="ib-label">Iteration 07</span>
+            <img src="assets/qv-07.webp" alt="" width="884" height="580" draggable="false" decoding="async">
+          </button>
+        </div>
+        <div class="ib-col">
+          <button type="button" class="ib-card" data-i="8" aria-label="Iteration 08: open details">
+            <span class="ib-label">Iteration 08</span>
+            <img src="assets/qv-08.webp" alt="" width="884" height="443" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card" data-i="9" aria-label="Iteration 09: open details">
+            <span class="ib-label">Iteration 09</span>
+            <img src="assets/qv-09.webp" alt="" width="884" height="470" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card" data-i="10" aria-label="Iteration 10: open details">
+            <span class="ib-label">Iteration 10</span>
+            <img src="assets/qv-10.webp" alt="" width="884" height="268" draggable="false" decoding="async">
+          </button>
+          <button type="button" class="ib-card ib-final" data-i="11" aria-label="Final design: open details">
+            <span class="ib-label">Final design</span>
+            <img src="assets/qv-11.webp" alt="" width="884" height="402" draggable="false" decoding="async">
+          </button>
+        </div>
+        </div>
+      </div>
+<div class="ib-scrim" id="ibScrim" hidden></div>
+<aside class="ib-drawer" id="ibDrawer" role="dialog" aria-labelledby="ibTitle" hidden>
+  <div class="ib-d-head">
+    <span class="ib-d-kicker" id="ibKicker">Iteration 01</span>
+    <button type="button" class="ib-d-close" id="ibClose" aria-label="Close">&times;</button>
+  </div>
+  <div class="ib-d-body">
+    <img class="ib-d-img" id="ibImg" src="" alt="">
+    <h3 class="ib-d-title" id="ibTitle">Why we didn’t go ahead</h3>
+    <p class="ib-d-text" id="ibText"></p>
+  </div>
+  <div class="ib-d-nav">
+    <button type="button" class="flow-btn" id="ibPrev">&larr; Previous</button>
+    <button type="button" class="flow-btn" id="ibNext">Next &rarr;</button>
+  </div>
+</aside>
+      </div>
+      <div class="flow-viewer-controls">
+        <button type="button" class="flow-btn" id="ibZoomIn">+ Zoom in</button>
+        <button type="button" class="flow-btn" id="ibReset">Reset</button>
+        <button type="button" class="flow-btn" id="ibZoomOut">- Zoom out</button>
+      </div>
+      <figcaption class="img-caption" data-caption-draft>Every Quick View iteration, from the first idea to the final design</figcaption>
+    </figure>
+
+    <!-- From your answer: why the final one won -->
+    <p class="cs-body">The main goal was to reduce the amount of scrolling the user would have to do to understand the data we were trying to present to them. That was the main deciding factor when picking between the UIs. We also needed to pick a visualisation that would actually express the information at a glance.</p>
+  </section>
+
+  <!-- 06 PIVOT -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">06</span> A mid-project pivot</div>
+    <h2 class="cs-sec-title">From right panel to popover</h2>
+    <p class="cs-body">The AI assistant was designed as a permanent right panel. Midway through, the team decided it would open from the Einstein button as a popover instead.</p>
+    <p class="cs-body">It sounds small, but it changed the layout and the flow. The component became wider, needed a close button and a redesigned floating action button, and needed a scroll section because the space was now fixed.</p>
+
+    <div class="ba-board pv-board">
+      <figure class="ba-col">
+        <img class="pv-shot" src="assets/panel.webp" alt="The AI Sales Assistant as a right panel: no close button, with a timestamp and feedback buttons at the bottom" width="768" height="1568" loading="lazy" decoding="async">
+        <span class="ba-pill">Before</span>
+        <figcaption class="img-caption" data-caption-draft>The permanent right panel, built into the Sales Cloud page</figcaption>
+      </figure>
+      <figure class="ba-col">
+        <div class="pv-anno">
+          <img class="pv-shot" src="assets/popover.webp" alt="The AI Sales Assistant as a popover, with a close button at the top right, its own scroll bar, and the Einstein floating action button below it" width="986" height="1520" loading="lazy" decoding="async">
+          <span class="pv-dot" style="left:76%;top:90.3%" aria-hidden="true">1</span>
+          <span class="pv-dot" style="left:76%;top:5.8%" aria-hidden="true">2</span>
+          <span class="pv-dot" style="left:96.5%;top:46%" aria-hidden="true">3</span>
+        </div>
+        <span class="ba-pill">After</span>
+        <figcaption class="img-caption" data-caption-draft>The popover, opened from the floating action button</figcaption>
+      </figure>
+    </div>
+
+    <ol class="pv-changes" aria-label="What changed for the popover">
+      <li><span class="pv-n">1</span><h3>A floating action button</h3><p>The assistant now opens from a floating action button.</p></li>
+      <li><span class="pv-n">2</span><h3>A close button</h3><p>On the right panel it was always going to be on the right side, with no option to close it. As a floating popover, users need a way to click off of it.</p></li>
+      <li><span class="pv-n">3</span><h3>Its own scroll bar</h3><p>The right panel was integrated into the Sales Cloud interface, so scrolling Sales Cloud scrolled the assistant too. The popover needed its own scroll bar.</p></li>
+    </ol>
+
+    <!-- From your answer: what I did first when I heard -->
+    <p class="cs-body">I had access to the sandbox, and when I noticed, I first went through all the user flows I had designed for, then listed all the UI changes that would need to be made. Then I set up a call with the software engineering team to discuss the size and behaviour, and presented the potential changes we would need to make.</p>
+  </section>
+
+  <!-- 07 HANDOFF -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">07</span> Handoff</div>
+    <h2 class="cs-sec-title">Annotated boards, aligned on version one</h2>
+    <p class="cs-body">I handed off annotated boards covering colors, text styles, spacing, icon sizes, and interactions. These were exported as PDFs with GIFs for animations, along with the Lightning guidelines. Before each handoff, I presented options and talked through feasibility with the tech team. Together we aligned on what belongs in version one, so some animations are set aside for now.</p>
+
+    <div class="ho-row" style="grid-template-columns:0.745fr 0.998fr 0.545fr">
+      <figure class="ho-item">
+        <div class="ho-frame" style="aspect-ratio:2070/2778"><img src="assets/handoff-opportunity-summary.webp" alt="Opportunity Summary tab annotated with text styles, colors and icon sizes" width="2070" height="2778" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('missing')"></div>
+        <figcaption class="img-caption" data-caption-draft>Text styles, colors and icon sizes on the Opportunity Summary</figcaption>
+      </figure>
+      <figure class="ho-item">
+        <div class="ho-frame" style="aspect-ratio:2174/2178"><img src="assets/handoff-whats-new.webp" alt="What’s New tab annotated with text styles and icon sizes" width="2174" height="2178" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('missing')"></div>
+        <figcaption class="img-caption" data-caption-draft>Text styles and icon sizes on What’s New</figcaption>
+      </figure>
+      <figure class="ho-item">
+        <div class="ho-frame" style="aspect-ratio:946/1736"><img src="assets/handoff-spacing.webp" alt="What’s New tab annotated with padding and spacing values" width="946" height="1736" loading="lazy" decoding="async" onerror="this.parentNode.classList.add('missing')"></div>
+        <figcaption class="img-caption" data-caption-draft>Spacing and padding on What’s New</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 08 WHAT'S NEXT -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">08</span> What's next</div>
+    <h2 class="cs-sec-title">In development, then UAT</h2>
+    <p class="cs-body">The feature is in development, targeted for the end of the quarter. User acceptance testing runs at the end of this quarter and next.</p>
+    <!-- From your answer: what I plan to measure -->
+    <p class="cs-body">We are hoping to get a good amount of our feedback through the feedback buttons, but the goal is to understand if the user experience is good enough to accomplish our goal.</p>
+  </section>
+
+  <!-- 09 LEARNINGS -->
+  <section class="cs-section cs-reveal">
+    <div class="cs-sec-label"><span class="n">09</span> What I took away</div>
+    <h2 class="cs-sec-title">Design ahead, test the extreme, adapt fast</h2>
+    <p class="cs-body">Looking back on three months of ideating, iterating, and handing off, these are the lessons I’m carrying into my next project.</p>
+    <div class="learnings">
+      <div class="learning">
+        <div class="l-text"><strong>Small changes ripple.</strong> When the assistant moved from a permanent right panel to a popover, it sounded like a small call. In practice it changed the layout, how people close it, how it scrolls, and how it opens. Because I had access to the sandbox, I went back through every user flow I had designed, listed each UI change, and brought that list to the engineering team before anything was built. It taught me to design ahead and adapt fast.</div>
+      </div>
+      <div class="learning">
+        <div class="l-text"><strong>Design for the extreme, not the average.</strong> Testing every Quick View iteration against an opportunity open 15x longer than the average OEM win showed me which layouts would break. Some options looked fine with typical numbers but fell apart when the numbers were reversed, or left awkward empty space. A design is only finished when it holds up no matter what the metric is.</div>
+      </div>
+      <div class="learning">
+        <div class="l-text"><strong>Less scrolling, not less meaning.</strong> The hardest balance was between space and clarity. Almost every layout that saved space either dropped context, left out metrics that mattered, or forced me to abbreviate labels, which made the numbers harder to read at a glance. I learned to cut the scroll without cutting what the sales team needs to act on.</div>
+      </div>
+      <div class="learning">
+        <div class="l-text"><strong>AI is a starting point, not the design.</strong> When I joined, the team was working from a UI generated entirely by AI. It was useful for showing what the feature could contain, and I kept using AI for inspiration and iteration. But the intent behind each choice had to come from the user experience and the Lightning Design System, so the assistant feels native to the tools sales teams already know.</div>
+      </div>
+      <div class="learning">
+        <div class="l-text"><strong>Detail earns trust.</strong> I moved from handing off Figma files and a design system to annotated boards that spell out colors, text styles, spacing, icon sizes, and interactions. Being that specific made it easier for the tech team to build exactly what was designed.</div>
+      </div>
+      <div class="learning">
+        <div class="l-text"><strong>Feasibility talks come first.</strong> Presenting options and talking through feasibility with the tech team before each handoff kept everyone aligned on priorities. Setting some animations aside for version one was a decision we made together, not a surprise later.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CTA (buttons only, no added copy) -->
+  <div class="cs-footer cs-reveal">
+    <div class="cs-footer-inner">
+      <div class="cs-footer-btns">
+        <a href="https://rhea-portfolio.vercel.app/portfolio-v2.html" class="fb-primary">See my portfolio ↗</a>
+        <a href="mailto:rheamittal0401@gmail.com" class="fb-ghost">Say hello to Rhea</a>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<footer class="footer-bar">
+  <span>© 2026 Rhea Mittal</span>
+  <span>Made with love and energy drinks</span>
+  <a href="https://rhea-portfolio.vercel.app/portfolio-v2.html" style="color:inherit;text-decoration:none;">← Back to portfolio</a>
+</footer>
+</main>
+
+<dialog class="leave" id="leaveModal" aria-labelledby="leaveTitle" aria-describedby="leaveBody">
+  <h2 class="leave-title" id="leaveTitle">You’re leaving the Copeland case study</h2>
+  <p class="leave-body" id="leaveBody">This case study is a standalone page and isn’t part of my main portfolio, so you won’t find it there. Continuing will take you to my portfolio, where you can see the rest of my work.</p>
+  <div class="leave-actions">
+    <button type="button" class="leave-stay" id="leaveStay">Stay here</button>
+    <a class="leave-go" id="leaveGo" href="https://rhea-portfolio.vercel.app/portfolio-v2.html">Continue to portfolio ↗</a>
+  </div>
+</dialog>
+<script>
+document.getElementById('navBurger').addEventListener('click', function () {
+  document.getElementById('navMobile').classList.add('open');
+});
+document.getElementById('navMobileClose').addEventListener('click', function () {
+  document.getElementById('navMobile').classList.remove('open');
+});
+var revealObs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) { e.target.classList.add('cs-visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.cs-reveal').forEach(function (el) { revealObs.observe(el); });
+/* Vid zoom: 65% → 100% when in view (same as portfolio case studies) */
+var vidObs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) {
+    if (e.isIntersecting) { e.target.classList.add('vid-expanded'); vidObs.unobserve(e.target); }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.vid-zoom').forEach(function (v) { vidObs.observe(v); });
+// The hero sits at the top of the page, so play its entrance right away instead of waiting to scroll
+(function () {
+  var hero = document.querySelector('.cs-hero-media .cs-reveal'), img = document.querySelector('.hero-img');
+  if (!hero || !img) return;
+  var done = false;
+  function play() { if (done) return; done = true; setTimeout(function () { hero.classList.add('cs-visible'); img.classList.add('vid-expanded'); }, 40); }
+  if (img.complete) play(); else { img.addEventListener('load', play, { once: true }); setTimeout(play, 600); }
+})();
+/* Leaving modal: confirm before going to the live portfolio (PDFs and email are left alone) */
+(function () {
+  var modal = document.getElementById('leaveModal');
+  if (!modal || typeof modal.showModal !== 'function') return;
+  var go = document.getElementById('leaveGo'), opener = null;
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest('a[href^="https://rhea-portfolio.vercel.app"]');
+    if (!a || a === go || /\.pdf($|[?#])/i.test(a.getAttribute('href'))) return;
+    e.preventDefault();
+    opener = a;
+    go.href = a.href;
+    var menu = document.getElementById('navMobile');
+    if (menu) menu.classList.remove('open');
+    modal.showModal();
+    document.getElementById('leaveStay').focus();
+  });
+  document.getElementById('leaveStay').addEventListener('click', function () { modal.close(); });
+  modal.addEventListener('click', function (e) {
+    if (e.target !== modal) return;
+    var r = modal.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) modal.close();
+  });
+  modal.addEventListener('close', function () { if (opener && opener.focus) opener.focus({ preventScroll: true }); });
+})();
+
+/* Final product toggle */
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.fp-tab'));
+  function select(t, focus) {
+    tabs.forEach(function (x) {
+      var on = x === t;
+      x.setAttribute('aria-selected', on);
+      x.tabIndex = on ? 0 : -1;
+      document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) t.focus();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { select(t); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      e.preventDefault();
+      select(tabs[(i + d + tabs.length) % tabs.length], true);
+    });
+  });
+})();
+
+// ITERATION BOARD: pan/zoom + side drawer
+(function () {
+  var viewer = document.getElementById('ibViewer'), canvas = document.getElementById('ibCanvas');
+  if (!viewer || !canvas) return;
+  var cards = Array.prototype.slice.call(canvas.querySelectorAll('.ib-card'));
+  // Reason each iteration was not taken forward. Fill these in.
+  var REASONS = {
+    1: 'The pill shapes didn’t go with the rest of the UI. There also wasn’t enough space to show every metric that mattered, like the 81 average days to win, so it was hard to convey all the information.',
+    2: 'It didn’t match the rest of the UI, and it was very repetitive: even the title used bars to separate each part.',
+    3: 'It took up too much space. The idea was to keep Quick View as small as possible, and this would have increased how much the user has to scroll to reach the tables below it.',
+    4: 'It took less space, but we couldn\u2019t express all the information. We were balancing having just enough space for everything, and to make it fit we had to abbreviate words and change a lot of things. That would be confusing for someone looking at it at a glance.',
+    5: 'It took up too much space. The idea was to keep Quick View as small as possible, and this would have increased how much the user has to scroll to reach the tables below it.',
+    6: 'It solved the space problem, but there was no room to add context for what the numbers meant. We couldn’t show the rest of the information either, like the target close date and the days left until it.',
+    7: 'It took up too much space. The idea was to keep Quick View as small as possible, and this would have increased how much the user has to scroll to reach the tables below it.',
+    8: 'It took up too much space. The idea was to keep Quick View as small as possible, and this would have increased how much the user has to scroll to reach the tables below it.',
+    9: 'It took up too much space, and used it inefficiently. It also wouldn’t hold up: this deal had been open far longer than the average, but when an opportunity is open for fewer days than the average, or the same, the design stops working.',
+    10: 'The same problem as iteration 01: there wasn’t enough space to show every metric that mattered, like the 81 average days to win.',
+    11: ''
+  };
+  var MIN = 0.2, MAX = 2.5, scale = 1, tx = 0, ty = 0, fit = 1;
+
+  function apply(anim) {
+    canvas.classList.toggle('anim', !!anim);
+    canvas.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+  }
+  function reset(anim) {
+    var vw = viewer.clientWidth, vh = viewer.clientHeight;
+    var cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+    fit = Math.min(vw / cw, vh / ch);
+    scale = fit;
+    tx = (vw - cw * scale) / 2;
+    ty = Math.max(0, (vh - ch * scale) / 2);
+    if (vw < 700) { scale = vw / (cw * 0.52); tx = 0; ty = 0; } // phones: start zoomed on the first column
+    apply(anim);
+  }
+  function zoomAt(f, cx, cy, anim) {
+    var ns = Math.max(MIN, Math.min(MAX, scale * f)), r = ns / scale;
+    tx = cx - r * (cx - tx); ty = cy - r * (cy - ty); scale = ns; apply(anim);
+  }
+  function center() { return [viewer.clientWidth / 2, viewer.clientHeight / 2]; }
+
+  viewer.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    var r = viewer.getBoundingClientRect();
+    zoomAt(1 - e.deltaY * 0.0015, e.clientX - r.left, e.clientY - r.top, false);
+  }, { passive: false });
+
+  // Pointer drag (mouse, pen, touch) with a click threshold
+  var pts = {}, down = null, moved = false, pinch = 0;
+  viewer.addEventListener('pointerdown', function (e) {
+    pts[e.pointerId] = [e.clientX, e.clientY];
+    var ids = Object.keys(pts);
+    if (ids.length === 1) { down = { x: e.clientX, y: e.clientY, tx: tx, ty: ty, card: e.target.closest('.ib-card') }; moved = false; }
+    if (ids.length === 2) { var a = pts[ids[0]], b = pts[ids[1]]; pinch = Math.hypot(a[0] - b[0], a[1] - b[1]); moved = true; }
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (!pts[e.pointerId]) return;
+    pts[e.pointerId] = [e.clientX, e.clientY];
+    var ids = Object.keys(pts);
+    if (ids.length === 2) {
+      var a = pts[ids[0]], b = pts[ids[1]], d = Math.hypot(a[0] - b[0], a[1] - b[1]), r = viewer.getBoundingClientRect();
+      if (pinch) zoomAt(d / pinch, (a[0] + b[0]) / 2 - r.left, (a[1] + b[1]) / 2 - r.top, false);
+      pinch = d; return;
+    }
+    if (!down) return;
+    var dx = e.clientX - down.x, dy = e.clientY - down.y;
+    if (!moved && Math.hypot(dx, dy) > 5) { moved = true; viewer.classList.add('dragging'); try { viewer.setPointerCapture(e.pointerId); } catch (_) {} }
+    if (moved) { tx = down.tx + dx; ty = down.ty + dy; apply(false); }
+  });
+  function up(e) {
+    if (!pts[e.pointerId]) return;
+    delete pts[e.pointerId];
+    if (Object.keys(pts).length === 0) {
+      if (down && !moved && down.card && e.type === 'pointerup') open(+down.card.dataset.i);
+      down = null; pinch = 0; viewer.classList.remove('dragging');
+    }
+  }
+  window.addEventListener('pointerup', up);
+  window.addEventListener('pointercancel', up);
+  // Keyboard: Enter/Space on a focused card (pointer clicks are handled above)
+  cards.forEach(function (c) {
+    c.addEventListener('click', function (e) { if (e.detail === 0) open(+c.dataset.i); });
+  });
+  viewer.addEventListener('keydown', function (e) {
+    if (e.target !== viewer) return;
+    var c = center(), step = 60;
+    if (e.key === '+' || e.key === '=') zoomAt(1.25, c[0], c[1], true);
+    else if (e.key === '-') zoomAt(1 / 1.25, c[0], c[1], true);
+    else if (e.key === 'ArrowLeft') { tx += step; apply(true); }
+    else if (e.key === 'ArrowRight') { tx -= step; apply(true); }
+    else if (e.key === 'ArrowUp') { ty += step; apply(true); }
+    else if (e.key === 'ArrowDown') { ty -= step; apply(true); }
+    else return;
+    e.preventDefault();
+  });
+
+  document.getElementById('ibZoomIn').addEventListener('click', function () { var c = center(); zoomAt(1.3, c[0], c[1], true); });
+  document.getElementById('ibZoomOut').addEventListener('click', function () { var c = center(); zoomAt(1 / 1.3, c[0], c[1], true); });
+  document.getElementById('ibReset').addEventListener('click', function () { reset(true); });
+
+  // Drawer
+  var drawer = document.getElementById('ibDrawer'), scrim = document.getElementById('ibScrim');
+  var kicker = document.getElementById('ibKicker'), dImg = document.getElementById('ibImg');
+  var dTitle = document.getElementById('ibTitle'), dText = document.getElementById('ibText');
+  var prev = document.getElementById('ibPrev'), next = document.getElementById('ibNext');
+  var current = 0, opener = null, N = cards.length;
+
+  function fill(i) {
+    current = i;
+    var final = i === N;
+    kicker.textContent = final ? 'Final design' : 'Iteration ' + (i < 10 ? '0' : '') + i;
+    dTitle.textContent = final ? 'Why we chose this one' : 'Why we didn’t go ahead';
+    dImg.src = 'assets/qv-' + (i < 10 ? '0' : '') + i + '.webp';
+    dImg.alt = (final ? 'Final' : 'Iteration ' + i) + ' of the Quick View card';
+    var t = REASONS[i];
+    dText.textContent = t || '[Add: reason]';
+    dText.classList.toggle('todo', !t);
+    var hide = final && !t; dTitle.hidden = hide; dText.hidden = hide;
+    prev.disabled = i === 1; next.disabled = i === N;
+    cards.forEach(function (c) { c.classList.toggle('active', +c.dataset.i === i); });
+  }
+  function open(i) {
+    opener = document.activeElement;
+    fill(i);
+    drawer.hidden = false; scrim.hidden = false;
+    requestAnimationFrame(function () { drawer.classList.add('open'); scrim.classList.add('open'); });
+    document.getElementById('ibClose').focus({ preventScroll: true });
+  }
+  function close() {
+    drawer.classList.remove('open'); scrim.classList.remove('open');
+    cards.forEach(function (c) { c.classList.remove('active'); });
+    setTimeout(function () { if (!drawer.classList.contains('open')) { drawer.hidden = true; scrim.hidden = true; } }, 400);
+    var back = cards[current - 1] || opener;
+    if (back && back.focus) back.focus({ preventScroll: true });
+  }
+  document.getElementById('ibClose').addEventListener('click', close);
+  scrim.addEventListener('click', close);
+  prev.addEventListener('click', function () { if (current > 1) fill(current - 1); });
+  next.addEventListener('click', function () { if (current < N) fill(current + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (drawer.hidden) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'Tab') { // keep focus inside the drawer
+      var f = Array.prototype.filter.call(drawer.querySelectorAll('button'), function (b) { return !b.disabled; });
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+      else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+    }
+  });
+
+  var imgs = canvas.querySelectorAll('img');
+  reset(false);
+  Array.prototype.forEach.call(imgs, function (im) { if (!im.complete) im.addEventListener('load', function () { reset(false); }, { once: true }); });
+  var rw = viewer.clientWidth;
+  window.addEventListener('resize', function () { if (viewer.clientWidth !== rw) { rw = viewer.clientWidth; reset(false); } });
+})();
+</script>
+<script src="scripts/nav-pill.js" defer></script>
+<script src="scripts/a11y.js" defer></script>
+</body>
+</html>
